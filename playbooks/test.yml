@@ -1,6 +1,5 @@
 ---
 - name: Test SSH Connectivity
-  hosts: all
   tasks:
     - name: Test SSH connection
       ansible.builtin.ping:
