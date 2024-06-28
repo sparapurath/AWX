@@ -1,6 +1,8 @@
 ---
-- name: Test WinRM connectivity
+- name: Test SSH Connectivity
   hosts: all
   tasks:
-    - name: Check Windows connectivity
-      win_ping:
+    - name: Test SSH connection
+      ansible.builtin.ping:
+  
+
