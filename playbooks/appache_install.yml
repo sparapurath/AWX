@@ -1,17 +1,39 @@
 ---
-- name: Install Apache web server
+- name: Setup NGINX and stop Apache
   hosts: all
-  become: yes
+  become: yes  # Ensure to run tasks with sudo
   tasks:
-    
-    - name: Install Apache on RedHat-based systems
-      ansible.builtin.yum:
-        name: httpd
+    - name: Install NGINX
+      package:
+        name: nginx
         state: present
-     
-    - name: Ensure Apache is running and enabled on RedHat-based systems
-      ansible.builtin.service:
-        name: httpd
+
+    - name: Ensure NGINX is started and enabled on boot
+      service:
+        name: nginx
         state: started
         enabled: yes
-     
+
+    - name: Stop Apache service if it is running
+      service:
+        name: apache2
+        state: stopped
+      when: ansible_os_family == 'Debian'
+
+    - name: Disable Apache service if it is enabled
+      service:
+        name: apache2
+        enabled: no
+      when: ansible_os_family == 'Debian'
+
+    - name: Stop Apache service if it is running
+      service:
+        name: httpd
+        state: stopped
+      when: ansible_os_family == 'RedHat'
+
+    - name: Disable Apache service if it is enabled
+      service:
+        name: httpd
+        enabled: no
+      when: ansible_os_family == 'RedHat'
